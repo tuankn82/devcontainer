@@ -1,0 +1,9 @@
+---
+- name: Create cloud VM in proxmox pvenhp
+  hosts: pvenhp
+  gather_facts: false
+
+  tasks:
+    - name: Download cloud image
+      ansible.builtin.import_role:
+        name: tuankn.pve.cloud_image

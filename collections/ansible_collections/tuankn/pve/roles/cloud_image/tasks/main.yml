@@ -1,0 +1,7 @@
+---
+- name: Create image directory
+  ansible.builtin.file:
+    state: directory
+    path: "{{ cloud_image_dest }}"
+    mode: "0700"
+  become: true

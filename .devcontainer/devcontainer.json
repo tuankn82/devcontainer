@@ -1,61 +1,61 @@
 {
-	"name": "Deploy Ansible With Devcontainer",
-  
-	"build": {
-		"dockerfile": "Dockerfile",
-		"context": ".."
-	},
-  
-	"mounts": [
-	  "source=${env:HOME}/.ssh,target=/ssh,type=bind",
-	  "source=${env:HOME}/private,target=/private,type=bind"
-	],
-  
-	"customizations": {
-	  "vscode": {
-		"extensions": [
-		  "bierner.markdown-preview-github-styles",
-		  "DavidAnson.vscode-markdownlint",
-		  "dhoeric.ansible-vault",
-		  "donjayamanne.githistory",
-		  "eamodio.gitlens",
-		  "esbenp.prettier-vscode",
-		  "mhutchie.git-graph",
-		  "ms-python.black-formatter",
-		  "ms-python.flake8",
-		  "ms-python.isort",
-		  "oderwat.indent-rainbow",
-		  "redhat.ansible",
-		  "samuelcolvin.jinjahtml",
-		  "tamasfe.even-better-toml",
-		  "yzhang.markdown-all-in-one"
-		],
-		"settings": {
-		  "[json]": {
-			"editor.defaultFormatter": "esbenp.prettier-vscode"
-		  },
-		  "[jsonc]": {
-			"editor.defaultFormatter": "esbenp.prettier-vscode"
-		  },
-		  "[markdown]": {
-			"editor.defaultFormatter": "esbenp.prettier-vscode"
-		  },
-		  "[python]": {
-			"editor.codeActionsOnSave": {
-			  "source.organizeImports": "explicit"
-			}
-		  },
-		  "ansible.python.interpreterPath": "/venv/bin/python3",
-		  "editor.formatOnSave": true,
-		  "files.associations": {
-			"*.j2": "ansible-jinja",
-			"*.yml": "ansible"
-		  },
-		  "files.trimFinalNewlines": true,
-		  "files.trimTrailingWhitespace": true,
-		  "python.defaultInterpreterPath": "/venv/bin/python3"
-		}
-	  }
-	},
-	"remoteUser": "root"
-  }
+  "name": "Deploy Ansible With Devcontainer",
+
+  // "build": {
+  // 	"dockerfile": "Dockerfile",
+  // 	"context": ".."
+  // },
+  "image": "ghcr.io/tuankn82/devcontainer:sha-6c5c35f",
+  "mounts": [
+    "source=${env:HOME}/.ssh,target=/ssh,type=bind",
+    "source=${env:HOME}/private,target=/private,type=bind"
+  ],
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bierner.markdown-preview-github-styles",
+        "DavidAnson.vscode-markdownlint",
+        "dhoeric.ansible-vault",
+        "donjayamanne.githistory",
+        "eamodio.gitlens",
+        "esbenp.prettier-vscode",
+        "mhutchie.git-graph",
+        "ms-python.black-formatter",
+        "ms-python.flake8",
+        "ms-python.isort",
+        "oderwat.indent-rainbow",
+        "redhat.ansible",
+        "samuelcolvin.jinjahtml",
+        "tamasfe.even-better-toml",
+        "yzhang.markdown-all-in-one"
+      ],
+      "settings": {
+        "[json]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[jsonc]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[markdown]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[python]": {
+          "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+          }
+        },
+        "ansible.python.interpreterPath": "/venv/bin/python3",
+        "editor.formatOnSave": true,
+        "files.associations": {
+          "*.j2": "ansible-jinja",
+          "*.yml": "ansible"
+        },
+        "files.trimFinalNewlines": true,
+        "files.trimTrailingWhitespace": true,
+        "python.defaultInterpreterPath": "/venv/bin/python3"
+      }
+    }
+  },
+  "remoteUser": "root"
+}

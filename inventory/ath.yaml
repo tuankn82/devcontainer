@@ -1,0 +1,20 @@
+---
+  lxc:
+    children:
+      proxy:
+        hosts:
+          ath-proxy.local.laptopkt.com
+      docker:
+        hosts:
+          jammy.ath.local.laptopkt.com
+      servers:
+        hosts:
+          arch.ath.local.laptopkt.com
+          bookworm.ath.local.laptopkt.com
+          centos8.ath.local.laptopkt.com
+          fedora.ath.local.laptopkt.com
+          rocky9.ath.local.laptopkt.com
+        vars:
+          ansible_ssh_common_args: -J ansible@ath-proxy.local.laptopkt.com
+    vars:
+      ansible_user: ansible
