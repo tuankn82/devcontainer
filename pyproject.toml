@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "container-ansible"
+name = "container-ansible-devcevcontainer"
 version = "0.1.0"
-description = "container deploy ansible proxmox"
+description = ""
 authors = ["tuankn82 <daitintdk@gmail.com>"]
 license = "GPL-3.0"
 readme = "README.md"
@@ -15,7 +15,7 @@ jmespath = "^1.0.1"
 proxmoxer = "^2.0.1"
 pydantic = "^2.8.2"
 requests = "^2.32.3"
-ansible-lint = "^6.0.0"
+
 
 [build-system]
 requires = ["poetry-core"]

@@ -1,11 +1,11 @@
 {
   "name": "Deploy Ansible With Devcontainer",
 
-  "build": {
-  	"dockerfile": "Dockerfile",
-  	"context": ".."
-  },
-  // "image": "ghcr.io/tuankn82/devcontainer:sha-6c5c35f",
+  // "build": {
+  //   "dockerfile": "Dockerfile",
+  //   "context": ".."
+  // },
+  "image": "ghcr.io/tuankn82/devcontainer:latest",
   "mounts": [
     "source=${env:HOME}/.ssh,target=/ssh,type=bind",
     "source=${env:HOME}/private,target=/private,type=bind"

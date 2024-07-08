@@ -34,8 +34,8 @@ RUN echo 'export VAULT_SKIP_VERIFY=1' >> ~/.bashrc
 WORKDIR /workspaces/ansible-devcontainer-git
 
 # set up poetry environment
-COPY poetry.lock pyproject.toml .
-RUN poetry install
+#COPY poetry.lock pyproject.toml .
+#RUN poetry install
 
 # symlink poetry env to ~/venv
 RUN VN=$(poetry env list | head -n 1 | cut -d ' ' -f 1) \
@@ -44,8 +44,8 @@ RUN VN=$(poetry env list | head -n 1 | cut -d ' ' -f 1) \
 # install collection (to get dependencies)
 ENV COLLECTION=collections/ansible_collections/tuankn/pve
 
-COPY $COLLECTION/galaxy.yml .
-RUN poetry run -- ansible-galaxy collection install .
+#COPY $COLLECTION/galaxy.yml .
+#RUN poetry run -- ansible-galaxy collection install .
 
 # remove empty collection directory so it finds the one in our git repo
 RUN rm -rf ~/.ansible/$COLLECTION
