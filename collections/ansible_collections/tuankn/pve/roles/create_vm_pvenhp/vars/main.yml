@@ -1,0 +1,31 @@
+---
+create_vm_pvenhp_values_defaults:
+  balloon: 0
+  cloud_init:
+    format: qcow2
+    password: "132456a@"
+    sshkeys: ~
+    storage: ansibledisk
+    user: ansible
+  cpu_cores: 1
+  cpu_type: host
+  disk:
+    discard: "on"
+    format: qcow2
+    image:
+      name: "{{ global_cloud_image_name | default('ubuntu') }}"
+      # file: Fedora-Cloud-Base-Generic.x86_64-40-1.14
+      storage: ansibledisk
+      vmid: 0
+    iothread: 1
+    size: 8
+    ssd: 1
+    storage: ansibledisk
+  memory: 2048
+  network:
+    ipconfig: ip=dhcp
+    model: virtio
+    bridge: vmbr0
+    firewall: 0
+    mtu: 1
+  onboot: false

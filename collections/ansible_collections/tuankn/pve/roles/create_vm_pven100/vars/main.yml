@@ -1,0 +1,20 @@
+---
+api_pven100_default:
+  validate_certs: false
+api_create_vm_pven100_values_defaults:
+  balloon: 0
+  cloud_init:
+    format: qcow2
+    password: "132456a@"
+    sshkeys: ~
+    storage: lexar
+    user: ansible
+  cpu_cores: 1
+  cpu_type: host
+  disk: []
+  image:
+    name: "{{ global_cloud_image_name | default('ubuntu') }}"
+    storage: "{{ global_cloud_image_storage | default('lexar') }}"
+  memory: 2048
+  network: []
+  onboot: false

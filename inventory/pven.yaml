@@ -1,0 +1,14 @@
+---
+pvenhp:
+  hosts:
+    pvenhp.home.tkn:
+      ansible_user: root
+      ansible_password: "{{ vault.pvenhp_server_password }}"
+      ansible_become_pass: "{{ vault.pvenhp_server_password }}"
+
+pven100:
+  hosts:
+    pven100.home.tkn:
+      ansible_user: root
+      ansible_password: "{{ vault.pven100_server_password }}"
+      ansible_become_pass: "{{ vault.pven100_server_password }}"

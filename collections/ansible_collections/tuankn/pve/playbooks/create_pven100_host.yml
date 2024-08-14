@@ -1,0 +1,68 @@
+---
+- name: Lookup vault file path
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Register the vault file path
+      ansible.builtin.set_fact:
+        vault_file_path: "{{ playbook_dir }}/vars/vault/pven100_secret.yaml"
+
+    # - name: Test lookup plugin
+    #   ansible.builtin.debug:
+    #     msg: "{{ lookup('tuankn.pve.cloud_image', 'fedora-40') }}"
+
+    # - name: Fail here
+    #   ansible.builtin.fail:
+
+    # - name: Test filter plugin
+    #   ansible.builtin.debug:
+    #     msg: "checksum = {{ checksum_file | tuankn.pve.checksum(filename) }}"
+    #   vars:
+    #     checksum_file: "collections/ansible_collections/tuankn/pve/plugins/filter/checksum1.txt"
+    #     filename: Rocky-8-GenericCloud.latest.x86_64.qcow2
+
+    # - name: Test plugin network_config
+    #   ansible.builtin.debug:
+    #     msg: "{{ network | tuankn.pve.network_config }} "
+    #   vars:
+    #     network:
+    #       - {}
+    #       - ipconfig: "ip=192.168.101.12/24"
+    #         bridge: "vmbr1"
+    # - name: Fail here
+    #   ansible.builtin.fail:
+
+- name: Run create_cloud_vm_pven100
+  ansible.builtin.import_playbook: tuankn.pve.create_cloud_vm_pven100
+  vars:
+    global_cloud_image_name: fedora
+    global_cloud_image_storage: lexar
+    #cloud_image_pven100_dest: /mnt/pve/lexar/images/0
+    api_pven100:
+      host: pven100.home.tkn
+      user: root@pam
+      token_id: ansible
+      token_secret: "{{ vault.pven100_api_token_secret }}"
+    api_create_vm_pven100_values:
+      name: proxy.ath.home.tkn
+      cpu_cores: 4
+      cloud_init:
+        sshkeys: |
+          ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPDoFMU9MfndmIsULoVbWW+aWy7cCltGox6/yLIkO+GF daitintdk@gmail.com
+      disk:
+        - {}
+        - size: 20
+      memory: 4096
+      network:
+        - {}
+        - ipconfig: ip=192.168.101.12/24
+          bridge: vmbr1
+      node: pven100
+      onboot: true
+    vault: |-
+      {{
+        lookup('ansible.builtin.file', hostvars['localhost']['vault_file_path'])
+        | ansible.builtin.unvault('vault')
+        | from_yaml
+      }}

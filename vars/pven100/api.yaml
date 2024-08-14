@@ -1,0 +1,6 @@
+---
+pven100_api_host: pven100.home.tkn
+pven100_api_user: root@pam
+pven100_api_token_id: ansible
+pven100_api_token_secret: "{{ vault.pven100_api_token_secret }}"
+pven100_node: pven100

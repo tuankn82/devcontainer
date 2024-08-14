@@ -1,0 +1,212 @@
+---
+argument_specs:
+  main:
+    short_description: Creates cloud VM
+    description: Creates VM in proxmox VE using cloud image
+    author:
+      - tuankn <daitintdk@gmail.com>
+    options:
+      create_vm_api:
+        type: dict
+        required: true
+        description: The proxmox API settings
+        options:
+          host:
+            type: str
+            required: true
+            description: The proxmox API settings
+          user:
+            type: str
+            required: true
+            description: The user associated with the API token
+          token_id:
+            type: str
+            required: true
+            description: The token ID
+          token_secret:
+            type: str
+            required: true
+            description: The API token
+      create_vm_values:
+        type: dict
+        required: true
+        description: The parameters to use when configuring the new VM
+        options:
+          balloon:
+            type: int
+            required: false
+            default: 0
+            choices: [0, 1]
+            description: 1 to enable memory ballooning device; 0 to disable
+          cloud_init:
+            type: dict
+            required: true
+            description: The cloud init properties
+            options:
+              user:
+                type: str
+                required: false
+                default: ansible
+                description: The cloud-init user to create
+              password:
+                type: str
+                required: false
+                default: "132456a@"
+                description: Password for the cloud-init user
+              sshkeys:
+                type: str
+                required: false
+                default: ~
+                description: SSH authorized keys for the cloud-init user
+              storage:
+                type: str
+                required: false
+                default: local
+                description: The proxmox storage ID to place the cloud-init drive
+              format:
+                type: str
+                required: false
+                default: qcow2
+                choices: [qcow2, raw]
+                description: The type of disk image for the cloud-init drive
+          cpu_cores:
+            type: int
+            required: false
+            default: 1
+            description: Number of cores for each CPU
+          cpu_type:
+            type: str
+            required: false
+            default: host
+            description: The type of CPU to emulate
+          disk:
+            type: dict
+            description: Disk configuration properties
+            required: true
+            options:
+              discard:
+                type: str
+                required: false
+                default: "on"
+                description: on to enable SSD trim support, off to disable
+                choices: ["on", "off"]
+              format:
+                type: str
+                required: false
+                default: qcow2
+                choices: [qcow2, raw]
+                description: Image type to use for this disk
+              image:
+                type: dict
+                required: true
+                description: The image properties for this disk
+                options:
+                  name:
+                    type: str
+                    choices:
+                      - alma
+                      - alma-8
+                      - alma-9
+                      - centos
+                      - centos-8
+                      - centos-9
+                      - debian
+                      - debian-12
+                      - debian-bookworm
+                      - fedora
+                      - fedora-40
+                      - rocky
+                      - rocky-8
+                      - rocky-9
+                      - ubuntu
+                      - ubuntu-22.04
+                      - ubuntu-24.04
+                      - ubuntu-jammy
+                      - ubuntu-noble
+                      - ubuntu-minimal
+                      - ubuntu-minimal-jammy
+                      - ubuntu-minimal-noble
+                    default: ubuntu
+                    description: Cloud image name to download
+                    required: false
+                  storage:
+                    type: str
+                    required: false
+                    default: local
+                    description: ID of proxmox storage to load the disk image from
+                  vmid:
+                    type: int
+                    required: false
+                    default: 0
+                    description: The VMID associa
+              iothread:
+                type: int
+                required: false
+                default: 1
+                description: 1 to enable iothreads; 0 to disable
+                choices: [0, 1]
+              size:
+                type: int
+                required: false
+                default: 8
+                description: Size of the disk in GB
+              ssd:
+                type: int
+                required: false
+                default: 1
+                description: 1 to enable SSD emulation; 0 to disable
+                choices: [0, 1]
+              storage:
+                type: str
+                required: false
+                default: local
+                description: ID of proxmox storage pool to place the disk
+          memory:
+            type: int
+            required: false
+            default: 2048
+            description: Memory to assign the VM in MiB
+          name:
+            type: str
+            required: true
+            description: Name to use for the proxmox VM
+          network:
+            type: dict
+            required: false
+            description: The network configurations
+            options:
+              ipconfig:
+                type: str
+                required: false
+                default: ip=dhcp
+                description: IP configuration for the NIC
+              model:
+                type: str
+                required: false
+                default: virtio
+                description: Model of NIC
+              bridge:
+                type: str
+                required: false
+                default: vmbr0
+                description: Bridge to attach this NIC
+              firewall:
+                type: int
+                required: false
+                default: 0
+                choices: [0, 1]
+                description: 1 to enable proxmox firewall; 0 to disable
+              mtu:
+                type: int
+                required: false
+                default: 1
+                description: MTU for the NIC (1 = match bridge MTU)
+          node:
+            type: str
+            required: true
+            description: Proxmox node to create this VM on
+          onboot:
+            type: bool
+            required: false
+            default: false
+            description: True to start the VM on proxmox boot; false otherwise

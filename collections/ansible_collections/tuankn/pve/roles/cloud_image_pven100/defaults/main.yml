@@ -1,0 +1,9 @@
+---
+cloud_image_pven100_dest: /var/lib/vz/images/0
+cloud_image_pven100_name: "{{ global_cloud_image_name | default('ubuntu') }}"
+cloud_image_storage_id: "{{ global_cloud_image_storage | default('lexar') }}"
+# cloud_image_pven100_url_base: |-
+#   https://cloud-images.ubuntu.com/jammy/current/
+# cloud_image_pven100_file_checksum: SHA256SUMS
+# cloud_image_pven100_file_img: jammy-server-cloudimg-amd64.img
+# cloud_image_pven100_file_qcow2: jammy-server-cloudimg-amd64.qcow2

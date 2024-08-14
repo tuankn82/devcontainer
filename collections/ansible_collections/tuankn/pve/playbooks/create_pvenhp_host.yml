@@ -1,0 +1,64 @@
+---
+- name: Lookup vault file path
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Register the vault file path
+      ansible.builtin.set_fact:
+        vault_file_path: "{{ playbook_dir }}/vars/vault/pvenhp_secret.yaml"
+
+    # - name: Test lookup plugin
+    #   ansible.builtin.debug:
+    #     msg: "{{ lookup('tuankn.pve.cloud_image', 'fedora-40') }}"
+
+    # - name: Fail here
+    #   ansible.builtin.fail:
+
+    # - name: Test filter plugin
+    #   ansible.builtin.debug:
+    #     msg: "checksum = {{ checksum_file | tuankn.pve.checksum(filename) }}"
+    #   vars:
+    #     checksum_file: "collections/ansible_collections/tuankn/pve/plugins/filter/checksum1.txt"
+    #     filename: Rocky-8-GenericCloud.latest.x86_64.qcow2
+
+    # - name: Fail here
+    #   ansible.builtin.fail:
+
+- name: Run create_cloud_vm_pvenhp playbook
+  ansible.builtin.import_playbook: tuankn.pve.create_cloud_vm_pvenhp
+  vars:
+    global_cloud_image_name: fedora-40
+    cloud_image_pvenhp_dest: /mnt/pve/ansibledisk/images/0
+    create_vm_api:
+      host: pvenhp.home.tkn
+      user: root@pam
+      token_id: ansible
+      token_secret: "{{ vault.pvenhp_api_token_secret }}"
+    create_vm_values:
+      name: proxy.ath.home.tkn
+      cpu_cores: 4
+      cloud_init:
+        sshkeys: |
+          ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPDoFMU9MfndmIsULoVbWW+aWy7cCltGox6/yLIkO+GF daitintdk@gmail.com
+      disk:
+        image:
+          # name: fedora
+          # file: Fedora-Cloud-Base-Generic.x86_64-40-1.14
+          storage: ansibledisk
+        size: 32
+      memory: 4096
+      network:
+        ipconfig: ip=192.168.100.65/24,gw=192.168.100.1
+        # model: virtio
+        # bridge: vmbr0
+        # firewall: 0
+        # mtu: 1
+      node: pvenhp
+      onboot: true
+    vault: |-
+      {{
+        lookup('ansible.builtin.file', hostvars['localhost']['vault_file_path'])
+        | ansible.builtin.unvault('vault')
+        | from_yaml
+      }}

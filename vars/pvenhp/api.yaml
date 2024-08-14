@@ -1,0 +1,6 @@
+---
+pvenhp_api_host: pvenhp.home.tkn
+pvenhp_api_user: root@pam
+pvenhp_api_token_id: ansible
+pvenhp_api_token_secret: "{{ vault.pvenhp_api_token_secret }}"
+pvenhp_node: pvenhp

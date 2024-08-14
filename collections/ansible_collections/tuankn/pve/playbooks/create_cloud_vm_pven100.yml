@@ -1,0 +1,20 @@
+---
+- name: Download cloud image for pven100
+  hosts: pven100
+  gather_facts: false
+
+  tasks:
+    - name: Download cloud image
+      ansible.builtin.import_role:
+        name: tuankn.pve.cloud_image_pven100
+      # vars:
+      #   cloud_image_dest: /mnt/pve/lexar/images/0
+
+- name: Create VM on pven100 host
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Create VM
+      ansible.builtin.import_role:
+        name: tuankn.pve.create_vm_pven100

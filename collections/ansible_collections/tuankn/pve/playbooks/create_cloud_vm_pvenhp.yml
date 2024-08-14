@@ -1,0 +1,19 @@
+---
+- name: Download cloud image for pvenhp
+  hosts: pvenhp
+  gather_facts: false
+
+  tasks:
+    - name: Download cloud image
+      ansible.builtin.import_role:
+        name: tuankn.pve.cloud_image_pvenhp
+      # vars:
+      #   cloud_image_dest: /mnt/pve/ansibledisk/images/0
+- name: Create VM on pvenhp host
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Create VM
+      ansible.builtin.import_role:
+        name: tuankn.pve.create_vm_pvenhp
