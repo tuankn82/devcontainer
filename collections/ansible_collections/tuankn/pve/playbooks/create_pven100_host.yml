@@ -45,7 +45,7 @@
       token_id: ansible
       token_secret: "{{ vault.pven100_api_token_secret }}"
     api_create_vm_pven100_values:
-      name: proxy1.ath.home.tkn
+      name: proxy.ath.home.tkn
       cpu_cores: 4
       cloud_init:
         sshkeys: |

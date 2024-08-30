@@ -34,7 +34,7 @@ RUN echo 'export VAULT_SKIP_VERIFY=1' >> ~/.bashrc
 WORKDIR /workspaces/ansible-devcontainer-git
 
 # set up poetry environment
-COPY poetry.lock pyproject.toml .
+COPY poetry.lock pyproject.toml ./
 RUN poetry install
 
 # symlink poetry env to ~/venv
