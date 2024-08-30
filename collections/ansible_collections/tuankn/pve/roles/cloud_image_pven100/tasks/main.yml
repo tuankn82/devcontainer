@@ -1,0 +1,65 @@
+---
+- name: Get storage pool directory
+  ansible.builtin.import_tasks: get_storage_pool.yml
+
+- name: Create image directory
+  ansible.builtin.file:
+    state: directory
+    path: "{{ cloud_image_pven100_dest }}"
+    mode: 0700
+  become: true
+
+- name: Delete temp file at the end of the block
+  vars:
+    image: "{{ lookup('tuankn.pve.cloud_image', cloud_image_pven100_name) }}"
+  block:
+    - name: Create tempfile
+      ansible.builtin.tempfile:
+      register: tempfile
+
+    - name: Download checksum
+      ansible.builtin.get_url:
+        dest: "{{ tempfile.path }}"
+        mode: "0644"
+        url: "{{ image['checksum_url'] }}"
+      delegate_to: localhost
+      run_once: true
+
+    - name: Download cloud image
+      ansible.builtin.get_url:
+        dest: "{{ cloud_image_pven100_dest }}/{{ image['filename'] | tuankn.pve.qcow2_image_name }}"
+        mode: "0644"
+        url: "{{ image['image_url'] }}"
+        checksum: "{{ tempfile.path | tuankn.pve.checksum(image['filename']) }}"
+      become: true
+
+    - name: debug api lookup
+      ansible.builtin.debug:
+        msg: "{{ image['checksum_url'] }}"
+      vars:
+        image: "{{ lookup('tuankn.pve.cloud_image', cloud_image_pven100_name) }}"
+    - name: Fail here
+      ansible.builtin.fail:
+    # vars:
+    #   checksum: |-
+    #     {{
+    #       lookup('ansible.builtin.file', tempfile.path)
+    #       | ansible.builtin.regex_search(regex)
+    #       | ansible.builtin.regex_replace(regex, replace)
+    #     }}
+    #   regex: |-
+    #     ([a-f0-9]+) \*{{ cloud_image_file_img }}
+    #   replace: |-
+    #     sha256:\1
+
+    # - name: Convert .img to .qcow2
+    #   ansible.builtin.command:
+    #     cmd: |-
+    #       mv {{ cloud_image_dest }}/{{ cloud_image_file_img }}
+    #       {{ cloud_image_dest }}/{{ cloud_image_file_qcow2 }}
+
+  always:
+    - name: Delete tempfile
+      ansible.builtin.file:
+        state: absent
+        path: "{{ tempfile.path }}"

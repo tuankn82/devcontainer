@@ -1,20 +1,27 @@
 ---
-  lxc:
-    children:
-      proxy:
-        hosts:
-          ath-proxy.local.laptopkt.com
-      docker:
-        hosts:
-          jammy.ath.local.laptopkt.com
-      servers:
-        hosts:
-          arch.ath.local.laptopkt.com
-          bookworm.ath.local.laptopkt.com
-          centos8.ath.local.laptopkt.com
-          fedora.ath.local.laptopkt.com
-          rocky9.ath.local.laptopkt.com
-        vars:
-          ansible_ssh_common_args: -J ansible@ath-proxy.local.laptopkt.com
-    vars:
-      ansible_user: ansible
+all:
+  children:
+    lxc:
+      hosts:
+        ath-proxy.home.tkn:
+      children:
+        servers:
+          hosts:
+            arch.ath.home.tkn:
+            bookworm.ath.home.tkn:
+            centos8.ath.home.tkn:
+            fedora.ath.home.tkn:
+            rocky9.ath.home.tkn:
+          vars:
+            ansible_ssh_common_args: "-o ProxyCommand=\
+              'ssh -o StricHostKeyChecking=no \
+              -o UserKnownHostsFile=/dev/null \
+              -W %h:%p ansible@proxy.ath.home.tkn'"
+            # ansible_ssh_common_args: -J ansible@ath-proxy.local.laptopkt.com
+    proxmoxprx:
+      children:
+        proxy:
+          hosts:
+            proxy.ath.home.tkn:
+  vars:
+    ansible_user: ansible

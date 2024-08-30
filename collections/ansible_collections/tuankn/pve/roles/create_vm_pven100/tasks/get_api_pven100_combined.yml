@@ -1,0 +1,9 @@
+---
+- name: Register api_pven100_combined
+  ansible.builtin.set_fact:
+    api_pven100_combined: |
+      {{
+        api_pven100_default
+        | ansible.builtin.combine(api_pven100, recursive=true)
+      }}
+  when: api_pven100_combined is not defined

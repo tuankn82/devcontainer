@@ -1,0 +1,53 @@
+---
+- name: Create image directory
+  ansible.builtin.file:
+    state: directory
+    path: "{{ cloud_image_pvenhp_dest }}"
+    mode: "0700"
+  become: true
+
+- name: Delete temp file at the end of the block
+  vars:
+    image: "{{ lookup('tuankn.pve.cloud_image', cloud_image_pvenhp_name) }}"
+  block:
+    - name: Create tempfile
+      ansible.builtin.tempfile:
+      register: tempfile
+
+    # - name: Debug tempfile
+    #   ansible.builtin.debug:
+    #     var: tempfile
+
+    - name: Download checksum
+      ansible.builtin.get_url:
+        dest: "{{ tempfile.path }}"
+        mode: "0644"
+        url: "{{ image['checksum_url'] }}"
+      delegate_to: localhost
+      run_once: true
+
+    - name: Download cloud image
+      ansible.builtin.get_url:
+        dest: "{{ cloud_image_pvenhp_dest }}/{{ image['filename'] | tuankn.pve.qcow2_image_name}}"
+        mode: "0644"
+        url: "{{ image['image_url'] }}"
+        # checksum: "{{ checksum }}"
+        # checksum: "{{ image['filename'] }}"
+        checksum: "{{ tempfile.path | tuankn.pve.checksum(image['filename']) }}"
+      become: true
+      # vars:
+      #   checksum: |-
+      #     {{
+      #       lookup('ansible.builtin.file', tempfile.path)
+      #       | ansible.builtin.regex_search(regex)
+      #       | ansible.builtin.regex_replace(regex, replace)
+      #     }}
+      #   regex: |-
+      #     SHA(256|512) \({{ image['filename'] }}\) = ([a-f0-9]+)
+      #   replace: |-
+      #     sha\1:\2
+  always:
+    - name: Delete tempfile
+      ansible.builtin.file:
+        state: absent
+        path: "{{ tempfile.path }}"
